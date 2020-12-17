@@ -100,24 +100,40 @@ bool AVL::search(tuple<int, int> target){
 // }
 
 void AVL::approximateSearch(tuple<int, int> target){
-    return approximateSearch(target, root);
+    double minDiff = double(INT_MAX);
+    tuple<int, int> minDiffNodeValue = make_tuple(-1, 0);
+
+    approximateSearch(target, root, minDiff, minDiffNodeValue);
+    
+    if(get<0>(minDiffNodeValue) != -1)
+        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(minDiffNodeValue) << "." << get<1>(minDiffNodeValue) << endl;
 }
 
-void AVL::approximateSearch(tuple<int, int> target, Node* n){
+void AVL::approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue){
     // TO DO
-    if(!root){
+    // if(!root){
+    //     return;
+    // }
+    // else if((!root->left) && (!root->right)){
+    //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
+    // }
+    // else if(this->getNode(target, root) != 0){
+    //     Node* t = this->getNode(target, root);
+    //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
+    // }
+    // else{
+    //     if(n)
+    // }
+
+    if(!n)
+        return;
+    
+    if(n->data == target){
+        minDiffNodeValue = target;
         return;
     }
-    else if((!root->left) && (!root->right)){
-        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
-    }
-    else if(this->getNode(target, root) != 0){
-        Node* t = this->getNode(target, root);
-        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
-    }
-    else{
-            // TO DO
-    }
+
+    if(minDiff > abs(get<0>(n->data) - get<0>))
 }
 
 void AVL::printPreOrder(){
