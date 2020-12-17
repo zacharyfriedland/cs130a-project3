@@ -6,6 +6,7 @@
 #define AVL_H
 
 #include <tuple>
+#include <string>
 using namespace std;
 
 class AVL {
@@ -23,19 +24,21 @@ class AVL {
     private:
         struct Node {
             tuple<int, int> data;
+            int height;
 
             Node* left;
             Node* right;
             Node* parent;
 
             Node(tuple<int,int> num = make_tuple(0, 0)) :
-                         data(num), left(nullptr), right(nullptr), parent(nullptr) { }
+                         data(num), height(1), left(nullptr), right(nullptr), parent(nullptr) { }
         };
         
         Node* root;
         void clear(Node* n);
         bool insert(tuple<int, int> target, Node* n);
         bool search(tuple<int, int> target, Node* n);
+        bool approximateSearch(tuple<int, int> target, Node* n);
         Node* getNode(tuple<int, int> target, Node* n);
         Node* getPredecessorNode(tuple<int, int> target);
         Node* getSuccessorNode(tuple<int, int> target);
