@@ -25,6 +25,16 @@ class AVL {
         struct Node {
             tuple<int, int> data;
             int height;
+            int getHeight(Node* n){
+                if(!n)
+                    return 0;
+                return n->height;
+            }
+            int getBalanceFactor(Node* n){
+                if(!n)
+                    return 0;
+                return (n->getHeight(n->left)) - (n->getHeight(n->right));
+            }
 
             Node* left;
             Node* right;
@@ -44,7 +54,8 @@ class AVL {
         Node* getSuccessorNode(tuple<int, int> target);
         void printPreOrder(Node* n);
         void printInOrder(Node* n);
-        void rotate(Node* n);
+        Node* rotateLeft(Node* n);
+        Node* rotateRight(Node* n);
         tuple<int, int> getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target);
         tuple<int, int> getSuccessor(Node* n, Node* &successor, tuple<int, int> target);
 

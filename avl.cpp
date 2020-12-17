@@ -64,6 +64,35 @@ bool AVL::insert(tuple<int, int> target, Node* n){
             return true;
         }
     }
+    n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
+    int balance = n->getBalanceFactor(n);
+
+    // If unbalanced, 4 cases
+
+    // Left left rotation
+    if(balance > 1 && target < n->left->data){
+        return rotateRight(n);
+    }
+
+    // Right right rotation
+    if(balance < -1 && target > n->right->data){
+        return rotateLeft(n);
+    }
+
+    // Left right rotation
+    if(balance > 1 && target > n->left->data){
+        n->left = rotateLeft(n->left);
+        return rotateRight(n);
+    }
+
+    // Right left rotation
+    if(balance < -1 && target < n->right->data){
+        n->right = rotateRight(n->right);
+        return rotateLeft(n);
+    }
+
+    return n;
+
 }
 
 // DONE
@@ -79,26 +108,7 @@ bool AVL::search(tuple<int, int> target){
     return false;
 }
 
-// DONE??
-// bool AVL::search(tuple<int, int> target, Node* n){
-//     if(!n){
-//         return false;
-//     }
-//     if(n){
-//         if(n->data == target){
-//             cout << get<0>(n->data) << "." << get<1>(n->data) << " found" << endl;
-//             return true;
-//         }
-//         else if(target < n->data){
-//             return search(target, n->left);
-//         }
-//         else if(target > n->data){
-//             return search(target, n->right);
-//         }
-//     }
-//     return false;
-// }
-
+// DONE
 tuple<int, int> AVL::getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target){
     while(n){
         // target exists
@@ -135,6 +145,7 @@ tuple<int, int> AVL::getPredecessor(Node* n, Node* &predecessor, tuple<int, int>
     return predecessor->data;
 }
 
+// DONE
 tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> target){
     while(n){
         // target exists
@@ -171,6 +182,7 @@ tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> tar
     return successor->data;
 }
 
+// DONE - NEEDS CHECKING
 void AVL::approximateSearch(tuple<int, int> target){
     if(root){
         tuple<int, int> pred = getPredecessor(root, root, target);
@@ -204,32 +216,12 @@ void AVL::approximateSearch(tuple<int, int> target){
     }
 }
 
-// void AVL::approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue){
-//     // TO DO
-//     // if(!root){
-//     //     return;
-//     // }
-//     // else if((!root->left) && (!root->right)){
-//     //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
-//     // }
-//     // else if(this->getNode(target, root) != 0){
-//     //     Node* t = this->getNode(target, root);
-//     //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
-//     // }
-//     // else{
-//     //     if(n)
-//     // }
-
-//     if(!n)
-//         return;
-    
-    
-// }
-
+// DONE
 void AVL::printPreOrder(){
     printPreOrder(root);
 }
 
+// DONE
 void AVL::printPreOrder(Node* n){
     if(n){
         cout << get<0>(n->data) << "." << get<1>(n->data) << " ";
@@ -238,10 +230,12 @@ void AVL::printPreOrder(Node* n){
     }
 }
 
+// DONE
 void AVL::printInOrder(){
     printInOrder(root);
 }
 
+// DONE
 void AVL::printInOrder(Node* n){
     if(n){
         printPreOrder(n->left);
@@ -250,6 +244,7 @@ void AVL::printInOrder(Node* n){
     }
 }
 
+// DONE
 AVL::Node* AVL::getNode(tuple<int, int> target, Node* n){
     if(n){
         if(n->data == target){
@@ -265,6 +260,7 @@ AVL::Node* AVL::getNode(tuple<int, int> target, Node* n){
     return 0;
 }
 
+// DONE
 AVL::Node* AVL::getPredecessorNode(tuple<int, int> target){
     Node* t = this->getNode(target, root);
     if(!t){
@@ -284,6 +280,7 @@ AVL::Node* AVL::getPredecessorNode(tuple<int, int> target){
     return t->parent;
 }
 
+// DONE
 AVL::Node* AVL::getSuccessorNode(tuple<int, int> target){
     Node* t = this->getNode(target, root);
     if(!t){
@@ -303,8 +300,30 @@ AVL::Node* AVL::getSuccessorNode(tuple<int, int> target){
     return t->parent;
 }
 
-void AVL::rotate(Node* n){
-    // TO DO
+AVL::Node* AVL::rotateLeft(Node* x){
+    Node* y = x->right;
+    Node* z = y->left;
+
+    y->left = x;
+    x->right = z;
+
+    x->height = max(x->getHeight(x->left), x->getHeight(x->right)) + 1;
+    y->height = max(y->getHeight(y->left), y->getHeight(y->right)) + 1;
+
+    return y;
+}
+
+AVL::Node* AVL::rotateRight(Node* y){
+    Node* x = y->left;
+    Node* z = x->right;
+
+    x->right = y;
+    y->left = z;
+
+    y->height = max(y->getHeight(y->left), y->getHeight(y->right)) + 1;
+    x->height = max(x->getHeight(x->left), x->getHeight(x->right)) + 1;
+
+    return x;
 }
 
 bool AVL::remove(tuple<int, int> target){
