@@ -1,6 +1,6 @@
 all: project3.out
 
-project3.out: project3.o avl.o 
+project3.out: main.cpp avl.cpp 
 	g++ -std=c++11 $^ -o $@
 
 clean:
