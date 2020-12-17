@@ -99,42 +99,132 @@ bool AVL::search(tuple<int, int> target){
 //     return false;
 // }
 
-void AVL::approximateSearch(tuple<int, int> target){
-    double minDiff = double(INT_MAX);
-    tuple<int, int> minDiffNodeValue = make_tuple(-1, 0);
-
-    approximateSearch(target, root, minDiff, minDiffNodeValue);
-    
-    if(get<0>(minDiffNodeValue) != -1)
-        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(minDiffNodeValue) << "." << get<1>(minDiffNodeValue) << endl;
-}
-
-void AVL::approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue){
-    // TO DO
-    // if(!root){
-    //     return;
-    // }
-    // else if((!root->left) && (!root->right)){
-    //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
-    // }
-    // else if(this->getNode(target, root) != 0){
-    //     Node* t = this->getNode(target, root);
-    //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
-    // }
-    // else{
-    //     if(n)
-    // }
-
-    if(!n)
-        return;
-    
-    if(n->data == target){
-        minDiffNodeValue = target;
-        return;
+tuple<int, int> AVL::getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target){
+    while(n){
+        // target exists
+        if(n->data == target){
+            if(n->left){
+                n = n->left;
+                while(n->right){
+                    n = n->right;
+                }
+                predecessor = n;
+                return predecessor->data;
+            }
+            return target;
+        }
+        // whole of target less than current Node
+        if(get<0>(target) < get<0>(n->data)){
+            n = n->left;
+        }
+        // whole is the same and decimal of current Node is greater than decimal of target
+        else if(get<0>(target) == get<0>(n->data) && get<1>(n->data) > get<1>(target)){
+            n = n->left;
+        }
+        // whole is less than whole of target
+        else if(get<0>(n->data) < get<0>(target)){
+            predecessor = n;
+            n = n->right;
+        }
+        // decimal is greater
+        else{
+            predecessor = n;
+            n = n->right;
+        }
     }
-
-    if(minDiff > abs(get<0>(n->data) - get<0>))
+    return predecessor->data;
 }
+
+tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> target){
+    while(n){
+        // target exists
+        if(n->data == target){
+            if(n->right){
+                n = n->right;
+                while(n->left){
+                    n = n->left;
+                }
+                successor = n;
+                return successor->data;
+            }
+            return target;
+        }
+        // whole of target greater than current Node
+        if(get<0>(target) > get<0>(n->data)){
+            n = n->right;
+        }
+        // whole is the same and decimal of current Node is less than decimal of target
+        else if(get<0>(target) == get<0>(n->data) && get<1>(n->data) < get<1>(target)){
+            n = n->right;
+        }
+        // whole is greater than whole of target
+        else if(get<0>(n->data) > get<0>(target)){
+            successor = n;
+            n = n->left;
+        }
+        // decimal is greater
+        else{
+            successor = n;
+            n = n->left;
+        }
+    }
+    return successor->data;
+}
+
+void AVL::approximateSearch(tuple<int, int> target){
+    if(root){
+        tuple<int, int> pred = getPredecessor(root, root, target);
+        tuple<int, int> suc = getSuccessor(root, root, target);
+
+        if(pred == target && suc == target){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+        }
+        int pred0diff = abs(get<0>(target) - get<0>(pred));
+        int pred1diff = abs(get<1>(target) - get<1>(pred));
+        int suc0diff = abs(get<0>(target) - get<0>(suc));
+        int suc1diff = abs(get<1>(target) - get<1>(suc));
+        if(pred0diff == suc0diff && pred1diff == suc1diff){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+        }
+        else if(pred0diff < suc0diff){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+        }
+        else if(suc0diff > pred0diff){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(suc) << "." << get<1>(suc) << endl;
+        }
+        else if(pred1diff < suc1diff){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+        }
+        else if(pred1diff > suc1diff){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(suc) << "." << get<1>(suc) << endl;
+        }
+        else{
+            cout << "Error, case missed" << endl;
+        }
+    }
+}
+
+// void AVL::approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue){
+//     // TO DO
+//     // if(!root){
+//     //     return;
+//     // }
+//     // else if((!root->left) && (!root->right)){
+//     //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
+//     // }
+//     // else if(this->getNode(target, root) != 0){
+//     //     Node* t = this->getNode(target, root);
+//     //     cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
+//     // }
+//     // else{
+//     //     if(n)
+//     // }
+
+//     if(!n)
+//         return;
+    
+    
+// }
 
 void AVL::printPreOrder(){
     printPreOrder(root);

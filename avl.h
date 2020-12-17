@@ -45,6 +45,8 @@ class AVL {
         void printPreOrder(Node* n);
         void printInOrder(Node* n);
         void rotate(Node* n);
+        tuple<int, int> getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target);
+        tuple<int, int> getSuccessor(Node* n, Node* &successor, tuple<int, int> target);
 
 };
 
