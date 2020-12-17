@@ -36,19 +36,44 @@ bool AVL::insert(tuple<int, int> target){
     return insert(target, root);
 }
 
+// TO DO ROTATION
 bool AVL::insert(tuple<int, int> target, Node* n){
-    // TO DO ---------------------
-    return false;
+    if(target == n->data)
+        return false;
+    else if(target < n->data){
+        if(n->left){
+            return insert(target, n->left);
+        }
+        else{
+            tuple<int,int> t = make_tuple(get<0>(target), get<1>(target));
+            n->left = new Node(t);
+            n->left->parent = n;
+            // CHECK ROTATION??
+            return true;
+        }
+    }
+    else{   // target > n->data
+        if(n->right){
+            return insert(target, n->right);
+        }
+        else{
+            tuple<int,int> t = make_tuple(get<0>(target), get<1>(target));
+            n->right = new Node(t);
+            n->right->parent = n;
+            // CHECK ROTATION??
+            return true;
+        }
+    }
 }
 
 // DONE
 bool AVL::search(tuple<int, int> target){
     if(!root){
-        cout << get<0>(root->data) << "." << get<1>(root->data) << " not found" << endl;
+        cout << get<0>(target) << "." << get<1>(target) << " not found" << endl;
         return false;
     }
     else if(this->getNode(target, root) != 0){
-        cout << get<0>(root->data) << "." << get<1>(root->data) << " found" << endl;
+        cout << get<0>(target) << "." << get<1>(target) << " found" << endl;
         return true;
     }
     return false;
@@ -74,14 +99,25 @@ bool AVL::search(tuple<int, int> target){
 //     return false;
 // }
 
-bool AVL::approximateSearch(tuple<int, int> target){
-    // TO DO
+void AVL::approximateSearch(tuple<int, int> target){
     return approximateSearch(target, root);
 }
 
-bool AVL::approximateSearch(tuple<int, int> target, Node* n){
+void AVL::approximateSearch(tuple<int, int> target, Node* n){
     // TO DO
-    return false;
+    if(!root){
+        return;
+    }
+    else if((!root->left) && (!root->right)){
+        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(root->data) << "." << get<1>(root->data) << endl;
+    }
+    else if(this->getNode(target, root) != 0){
+        Node* t = this->getNode(target, root);
+        cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(t->data) << "." << get<1>(t->data) << endl;
+    }
+    else{
+            // TO DO
+    }
 }
 
 void AVL::printPreOrder(){
@@ -169,5 +205,3 @@ bool AVL::remove(tuple<int, int> target){
     // TO DO
     return false;
 }
-
-

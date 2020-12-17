@@ -16,7 +16,7 @@ class AVL {
         bool insert(tuple<int, int> target);
         bool remove(tuple<int, int> target);
         bool search(tuple<int, int> target);
-        bool approximateSearch(tuple<int, int> target);
+        void approximateSearch(tuple<int, int> target);
         void printPreOrder();
         void printInOrder();
 
@@ -38,7 +38,7 @@ class AVL {
         void clear(Node* n);
         bool insert(tuple<int, int> target, Node* n);
         bool search(tuple<int, int> target, Node* n);
-        bool approximateSearch(tuple<int, int> target, Node* n);
+        void approximateSearch(tuple<int, int> target, Node* n);
         Node* getNode(tuple<int, int> target, Node* n);
         Node* getPredecessorNode(tuple<int, int> target);
         Node* getSuccessorNode(tuple<int, int> target);
