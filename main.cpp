@@ -10,11 +10,12 @@ int main(int argc, char** argv) {
     avl->insert(make_tuple(3, 5));
     avl->insert(make_tuple(1, 8));
     avl->insert(make_tuple(4, 5));
-    // avl->insert(make_tuple(4, 2));
+    avl->insert(make_tuple(4, 2));
     avl->insert(make_tuple(12, 3));
     avl->insert(make_tuple(1, 2));
     avl->insert(make_tuple(22, 2));
     avl->insert(make_tuple(33, 3));
+    avl->insert(make_tuple(20, 0));
 
     avl->printPreOrder();
     cout << endl;
