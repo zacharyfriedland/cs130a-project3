@@ -28,42 +28,37 @@ void AVL::clear(Node* n){
 
 // DONE
 bool AVL::insert(tuple<int, int> target){
-    if(!root){
-        root = new Node(make_tuple(get<0>(target), get<1>(target)));
-        cout << get<0>(root->data) << "." << get<1>(root->data) << " inserted" << endl;
-        return true;
-    }
+    // if(!root){
+    //     root = new Node(make_tuple(get<0>(target), get<1>(target)));
+    //     cout << get<0>(root->data) << "." << get<1>(root->data) << " inserted" << endl;
+    //     return true;
+    // }
     return insert(target, root);
 }
 
 // TO DO ROTATION
-bool AVL::insert(tuple<int, int> target, Node* n){
+AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
+    if(!root){
+        root = new Node(make_tuple(get<0>(target), get<1>(target)));
+        cout << get<0>(root->data) << "." << get<1>(root->data) << " inserted" << endl;
+        return root;
+    }
+
+    if(!n){
+        Node* in = new Node(target);
+        cout << get<0>(in->data) << "." << get<1>(in->data) << " inserted" << endl;
+        return in;
+    }
+
     if(target == n->data)
-        return false;
+        return n;
     else if(target < n->data){
-        if(n->left){
-            return insert(target, n->left);
-        }
-        else{
-            tuple<int,int> t = make_tuple(get<0>(target), get<1>(target));
-            n->left = new Node(t);
-            n->left->parent = n;
-            // CHECK ROTATION??
-            return true;
-        }
+        n->left = insert(target, n->left);
     }
     else{   // target > n->data
-        if(n->right){
-            return insert(target, n->right);
-        }
-        else{
-            tuple<int,int> t = make_tuple(get<0>(target), get<1>(target));
-            n->right = new Node(t);
-            n->right->parent = n;
-            // CHECK ROTATION??
-            return true;
-        }
+        n->right = insert(target, n->right);
     }
+
     n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
     int balance = n->getBalanceFactor(n);
 
@@ -238,9 +233,9 @@ void AVL::printInOrder(){
 // DONE
 void AVL::printInOrder(Node* n){
     if(n){
-        printPreOrder(n->left);
+        printInOrder(n->left);
         cout << get<0>(n->data) << "." << get<1>(n->data) << " ";
-        printPreOrder(n->right);
+        printInOrder(n->right);
     }
 }
 
