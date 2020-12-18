@@ -6,26 +6,26 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    AVL* avl = new AVL();
-    avl->insert(make_tuple(3, 5));
-    avl->insert(make_tuple(1, 8));
-    avl->insert(make_tuple(4, 5));
-    avl->insert(make_tuple(4, 2));
-    avl->insert(make_tuple(12, 3));
-    avl->insert(make_tuple(1, 2));
-    avl->insert(make_tuple(22, 2));
-    avl->insert(make_tuple(33, 3));
-    avl->insert(make_tuple(20, 0));
+    // AVL* avl = new AVL();
+    // avl->insert(make_tuple(3, 5));
+    // avl->insert(make_tuple(1, 8));
+    // avl->insert(make_tuple(4, 5));
+    // avl->insert(make_tuple(4, 2));
+    // avl->insert(make_tuple(12, 3));
+    // avl->insert(make_tuple(1, 2));
+    // avl->insert(make_tuple(22, 2));
+    // avl->insert(make_tuple(33, 3));
+    // avl->insert(make_tuple(20, 0));
 
-    avl->printPreOrder();
-    cout << endl;
-    avl->printInOrder();
-    cout << endl;
+    // avl->printPreOrder();
+    // cout << endl;
+    // avl->printInOrder();
+    // cout << endl;
 
-    avl->search(make_tuple(4, 5));
-    avl->search(make_tuple(4, 6));
+    // avl->search(make_tuple(4, 5));
+    // avl->search(make_tuple(4, 6));
 
-    avl->approximateSearch(make_tuple(4, 0));
+    // avl->approximateSearch(make_tuple(4, 0));
 
 
 

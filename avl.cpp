@@ -11,7 +11,13 @@
 using namespace std;
 
 // DONE
-AVL::AVL() : root(nullptr) { }  
+AVL::AVL() : root(nullptr) { 
+    balanceConstraint = 1;
+} 
+
+AVL::AVL(int k) : root(nullptr) { 
+    balanceConstraint = k;
+} 
 
 // DONE
 AVL::~AVL(){
@@ -324,7 +330,79 @@ AVL::Node* AVL::rotateRight(Node* y){
     return x;
 }
 
+AVL::Node* AVL::minNode(Node* n){
+    if(n){
+        while(n->left)
+            n = n->left;
+        return n;
+    }
+    return 0;
+}
+
 bool AVL::remove(tuple<int, int> target){
-    // TO DO
-    return false;
+    return remove(target, root);
+}
+
+AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
+    if(!n)
+        return 0;
+    if(target < n->data)
+        n->left = remove(target, n->left);
+    else if(target > n->data)
+        n->right = remove(target, n->right);
+    else{
+        if(!(n->left) || !(n->right)){
+            Node* tmp;
+            if(n->left){
+                tmp = n->left;
+            }
+            else{
+                tmp = n->right;
+            }
+
+            if(!tmp){
+                tmp = n;
+                n = nullptr;
+            }
+            else{
+                *n = *tmp;
+            }
+            free(tmp);
+        }
+        else{
+            Node* tmp = minNode(n->right);
+            n->data = tmp->data;
+            n->right = remove(tmp->data, n->right);
+        }
+    }
+
+    if(!n)
+        return n;
+    
+    n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
+    int balanceFactor = n->getBalanceFactor(n);
+
+    // Left left rotation
+    if(balanceFactor > 1 && n->getBalanceFactor(n->left) >= 0){
+        return rotateRight(n);
+    }
+    
+    // Left right rotation
+    if(balanceFactor > 1 && n->getBalanceFactor(n->left) < 0){
+        n->left = rotateLeft(n->left);
+        return rotateRight(n);
+    }
+
+    // Right right rotation
+    if(balanceFactor < -1 && n->getBalanceFactor(n->right) <= 0){
+        return rotateLeft(n);
+    }
+
+    // Right left rotation
+    if(balanceFactor < -1 && n->getBalanceFactor(n->right) > 0){
+        n->right = rotateRight(n->right);
+        return rotateLeft(n);
+    }
+
+    return n;
 }
