@@ -20,6 +20,7 @@ class AVL {
         void approximateSearch(tuple<int, int> target);
         void printPreOrder();
         void printInOrder();
+        string printer;
 
     
     private:
@@ -60,8 +61,8 @@ class AVL {
         Node* rotateLeft(Node* n);
         Node* rotateRight(Node* n);
         Node* minNode(Node* n);
-        tuple<int, int> getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target);
-        tuple<int, int> getSuccessor(Node* n, Node* &successor, tuple<int, int> target);
+        tuple<int, int> getPredecessor(Node* n, Node* predecessor, tuple<int, int> target);
+        tuple<int, int> getSuccessor(Node* n, Node* successor, tuple<int, int> target);
 
 };
 

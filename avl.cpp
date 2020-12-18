@@ -114,7 +114,7 @@ bool AVL::search(tuple<int, int> target){
 }
 
 // DONE
-tuple<int, int> AVL::getPredecessor(Node* n, Node* &predecessor, tuple<int, int> target){
+tuple<int, int> AVL::getPredecessor(Node* n, Node* predecessor, tuple<int, int> target){
     while(n){
         // target exists
         if(n->data == target){
@@ -151,7 +151,7 @@ tuple<int, int> AVL::getPredecessor(Node* n, Node* &predecessor, tuple<int, int>
 }
 
 // DONE
-tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> target){
+tuple<int, int> AVL::getSuccessor(Node* n, Node* successor, tuple<int, int> target){
     while(n){
         // target exists
         if(n->data == target){
@@ -165,6 +165,7 @@ tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> tar
             }
             return target;
         }
+        
         // whole of target greater than current Node
         if(get<0>(target) > get<0>(n->data)){
             n = n->right;
@@ -181,8 +182,9 @@ tuple<int, int> AVL::getSuccessor(Node* n, Node* &successor, tuple<int, int> tar
         // decimal is greater
         else{
             successor = n;
-            n = n->left;
+            n = n->left;   
         }
+        
     }
     return successor->data;
 }
@@ -192,7 +194,7 @@ void AVL::approximateSearch(tuple<int, int> target){
     if(root){
         tuple<int, int> pred = getPredecessor(root, root, target);
         tuple<int, int> suc = getSuccessor(root, root, target);
-
+        
         if(pred == target && suc == target){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
         }
@@ -223,12 +225,15 @@ void AVL::approximateSearch(tuple<int, int> target){
 // DONE
 void AVL::printPreOrder(){
     printPreOrder(root);
+    printer = printer.substr(0, printer.size()-1);
+    cout << printer << endl;
+    printer = "";
 }
 
 // DONE
 void AVL::printPreOrder(Node* n){
     if(n){
-        cout << get<0>(n->data) << "." << get<1>(n->data) << " ";
+        printer += (to_string(get<0>(n->data)) + "." + to_string(get<1>(n->data)) + " ");
         printPreOrder(n->left);
         printPreOrder(n->right);
     }
@@ -237,13 +242,16 @@ void AVL::printPreOrder(Node* n){
 // DONE
 void AVL::printInOrder(){
     printInOrder(root);
+    printer = printer.substr(0, printer.size()-1);
+    cout << printer << endl;
+    printer = "";
 }
 
 // DONE
 void AVL::printInOrder(Node* n){
     if(n){
         printInOrder(n->left);
-        cout << get<0>(n->data) << "." << get<1>(n->data) << " ";
+        printer += (to_string(get<0>(n->data)) + "." + to_string(get<1>(n->data)) + " ");
         printInOrder(n->right);
     }
 }
@@ -332,15 +340,20 @@ AVL::Node* AVL::rotateRight(Node* y){
 
 AVL::Node* AVL::minNode(Node* n){
     if(n){
-        while(n->left)
-            n = n->left;
+        while(n->right)
+            n = n->right;
         return n;
     }
     return 0;
 }
 
 bool AVL::remove(tuple<int, int> target){
-    return remove(target, root);
+    if(getNode(target, root) != 0){
+        cout << get<0>(target) << "." << get<1>(target) << " deleted" << endl;
+        return remove(target, root);
+    }
+    cout << "node does not exist" << endl;
+    return 0;
 }
 
 AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
@@ -370,9 +383,13 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
             free(tmp);
         }
         else{
-            Node* tmp = minNode(n->right);
+            // predecessor
+            Node* tmp = minNode(n->left);
+            // put data of predecessor in this node
             n->data = tmp->data;
-            n->right = remove(tmp->data, n->right);
+            printPreOrder();
+            n->left = remove(tmp->data, n->left);
+
         }
     }
 
@@ -382,27 +399,32 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
     n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
     int balanceFactor = n->getBalanceFactor(n);
 
-    // Left left rotation
-    if(balanceFactor > 1 && n->getBalanceFactor(n->left) >= 0){
-        return rotateRight(n);
-    }
-    
-    // Left right rotation
-    if(balanceFactor > 1 && n->getBalanceFactor(n->left) < 0){
-        n->left = rotateLeft(n->left);
-        return rotateRight(n);
-    }
-
     // Right right rotation
     if(balanceFactor < -1 && n->getBalanceFactor(n->right) <= 0){
+        cout << "right right" << endl;
         return rotateLeft(n);
+    }
+
+    // Left left rotation
+    if(balanceFactor > 1 && n->getBalanceFactor(n->left) >= 0){
+        cout << "left left" << endl;
+        return rotateRight(n);
     }
 
     // Right left rotation
     if(balanceFactor < -1 && n->getBalanceFactor(n->right) > 0){
+        cout << "right left" << endl;
         n->right = rotateRight(n->right);
         return rotateLeft(n);
     }
+    
+    // Left right rotation
+    if(balanceFactor > 1 && n->getBalanceFactor(n->left) < 0){
+        cout << "left right" << endl;
+        n->left = rotateLeft(n->left);
+        return rotateRight(n);
+    }
+
 
     return n;
 }
