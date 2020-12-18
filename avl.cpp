@@ -6,6 +6,7 @@
 #include <tuple>
 #include <iostream>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -100,6 +101,9 @@ bool AVL::search(tuple<int, int> target){
         cout << get<0>(target) << "." << get<1>(target) << " found" << endl;
         return true;
     }
+    else{
+        cout << get<0>(target) << "." << get<1>(target) << " not found" << endl;
+    }
     return false;
 }
 
@@ -186,23 +190,22 @@ void AVL::approximateSearch(tuple<int, int> target){
         if(pred == target && suc == target){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
         }
-        int pred0diff = abs(get<0>(target) - get<0>(pred));
-        int pred1diff = abs(get<1>(target) - get<1>(pred));
-        int suc0diff = abs(get<0>(target) - get<0>(suc));
-        int suc1diff = abs(get<1>(target) - get<1>(suc));
-        if(pred0diff == suc0diff && pred1diff == suc1diff){
+        string predString = to_string(get<0>(pred)) + "." + to_string(get<1>(pred));
+        string sucString = to_string(get<0>(suc)) + "." + to_string(get<1>(suc));
+        string targetString = to_string(get<0>(target)) + "." + to_string(get<1>(target));
+        double predNum = stod(predString);
+        double sucNum = stod(sucString);
+        double targetNum = stod(targetString);
+
+        double predDiff = fabs(targetNum - predNum);
+        double sucDiff = fabs(targetNum - sucNum);
+        if(predDiff == sucDiff){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
         }
-        else if(pred0diff < suc0diff){
+        else if(predDiff < sucDiff){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
         }
-        else if(suc0diff > pred0diff){
-            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(suc) << "." << get<1>(suc) << endl;
-        }
-        else if(pred1diff < suc1diff){
-            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
-        }
-        else if(pred1diff > suc1diff){
+        else if(predDiff > sucDiff){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(suc) << "." << get<1>(suc) << endl;
         }
         else{
