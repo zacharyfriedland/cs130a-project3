@@ -223,10 +223,11 @@ void AVL::approximateSearch(tuple<int, int> target){
         double sucNum = stod(sucString);
         double targetNum = stod(targetString);
 
-        double predDiff = fabs(targetNum - predNum);
-        double sucDiff = fabs(targetNum - sucNum);
-        if(predDiff == sucDiff){
-            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+        float predDiff = fabs(targetNum - predNum);
+        float sucDiff = fabs(targetNum - sucNum);
+
+        if((predDiff - sucDiff) == 0.0){
+            cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << predNum << endl;
         }
         else if(predDiff < sucDiff){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
