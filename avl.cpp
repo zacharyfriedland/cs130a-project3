@@ -363,7 +363,6 @@ bool AVL::remove(tuple<int, int> target){
         cout << get<0>(target) << "." << get<1>(target) << " deleted" << endl;
         return remove(target, root);
     }
-    cout << "node does not exist" << endl;
     return 0;
 }
 
@@ -398,7 +397,6 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
             Node* tmp = minNode(n->left);
             // put data of predecessor in this node
             n->data = tmp->data;
-            printPreOrder();
             n->left = remove(tmp->data, n->left);
 
         }
