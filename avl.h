@@ -40,10 +40,9 @@ class AVL {
 
             Node* left;
             Node* right;
-            //Node* parent;
 
             Node(tuple<int,int> num = make_tuple(0, 0)) :
-                         data(num), height(1), left(nullptr), right(nullptr) { } //parent(nullptr) { }
+                         data(num), height(1), left(nullptr), right(nullptr) { }
         };
         
         int balanceConstraint;
@@ -55,8 +54,6 @@ class AVL {
         void approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue);
         Node* getNode(tuple<int, int> target, Node* n);
         Node* findParent(tuple<int, int> target, Node* n);
-        Node* getPredecessorNode(tuple<int, int> target);
-        Node* getSuccessorNode(tuple<int, int> target);
         void printPreOrder(Node* n);
         void printInOrder(Node* n);
         Node* rotateLeft(Node* n);
