@@ -6,24 +6,6 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-//     AVL* avl = new AVL();
-//     avl->insert(make_tuple(3, 5));
-//     avl->insert(make_tuple(3, 9));
-
-//     avl->insert(make_tuple(4, 5));
-//     // avl->insert(make_tuple(4, 2));
-//     // avl->insert(make_tuple(12, 3));
-//     // avl->insert(make_tuple(1, 2));
-//     // avl->insert(make_tuple(22, 2));
-//     // avl->insert(make_tuple(33, 3));
-//     // avl->insert(make_tuple(20, 0));
-
-
-// //insert 4 5, insert 3 9, insert 3 5, insert 2 7, insert 2 6, in_order, pre_order,
-
-//   avl->printInOrder();
-
-
   vector<string> input;
   string keywords[] = {"search", "insert", "delete", "approx_search", "in_order", "pre_order", "in_order,", "pre_order,"};
   string argument = argv[1];
@@ -94,7 +76,5 @@ int main(int argc, char** argv) {
       }
     }
   }
-  
-
   return 0;
 }
