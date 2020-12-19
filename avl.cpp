@@ -73,7 +73,7 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
     // If unbalanced, 4 cases
 
     // Left left rotation
-    if(balance > 1 && target < n->left->data){
+    if(balance > balanceConstraint && target < n->left->data){
         if(n == root){
             root = rotateRight(n);
             return root;
@@ -82,7 +82,7 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
     }
 
     // Right right rotation
-    if(balance < -1 && target > n->right->data){
+    if(balance < (-1*balanceConstraint) && target > n->right->data){
         if(n == root){
             root = rotateLeft(n);
             return root;
@@ -91,7 +91,7 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
     }
 
     // Left right rotation
-    if(balance > 1 && target > n->left->data){
+    if(balance > balanceConstraint && target > n->left->data){
         n->left = rotateLeft(n->left);
         if(n == root){
             root = rotateRight(n);
@@ -101,7 +101,7 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
     }
 
     // Right left rotation
-    if(balance < -1 && target < n->right->data){
+    if(balance < (-1*balanceConstraint) && target < n->right->data){
         n->right = rotateRight(n->right);
         if(n == root){
             root = rotateLeft(n);
@@ -329,17 +329,14 @@ AVL::Node* AVL::getNode(tuple<int, int> target, Node* n){
 //     return t->parent;
 // }
 
-AVL::Node* AVL::rotateLeft(Node* x){
-    Node* y = x->right;
-    Node* z = y->left;
+AVL::Node* AVL::rotateLeft(Node* grandparent){
+    Node* temp = grandparent->right;
+    grandparent->right = temp->left;
+    temp->left = grandparent;
 
-    y->left = x;
-    x->right = z;
-
-    x->height = max(x->getHeight(x->left), x->getHeight(x->right)) + 1;
-    y->height = max(y->getHeight(y->left), y->getHeight(y->right)) + 1;
-
-    return y;
+    grandparent->height = max(grandparent->getHeight(grandparent->left), grandparent->getHeight(grandparent->right)) + 1;
+    temp->height = max(temp->getHeight(temp->left), temp->getHeight(temp->right)) + 1;
+    return temp;
 }
 
 AVL::Node* AVL::rotateRight(Node* grandparent){
