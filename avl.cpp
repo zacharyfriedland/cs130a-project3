@@ -68,11 +68,14 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
 
     n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
     int balance = n->getBalanceFactor(n);
+    cout << "value = " << get<0>(n->data) << get<1>(n->data) << " height = " << n->height<< endl;
+
 
     // If unbalanced, 4 cases
 
     // Left left rotation
     if(balance > 1 && target < n->left->data){
+        cout << "rotate right" << endl;
         if(n == root){
             root = rotateRight(n);
             return root;
@@ -346,9 +349,11 @@ AVL::Node* AVL::rotateRight(Node* grandparent){
     grandparent->left = temp->right;
     temp->right = grandparent;
 
-    temp->height = max(temp->getHeight(temp->left), temp->getHeight(temp->right)) + 1;
+    cout << "temp height left = " << temp->getHeight(temp->left) << endl;
+    cout << "temp height right = " << temp->getHeight(temp->right) << endl;
     grandparent->height = max(grandparent->getHeight(grandparent->left), grandparent->getHeight(grandparent->right)) + 1;
-
+    temp->height = max(temp->getHeight(temp->left), temp->getHeight(temp->right)) + 1;
+    cout << "temp value = " << get<0>(temp->data) << get<1>(temp->data) << " height = " << temp->height<< endl;
     return temp;
 }
 
