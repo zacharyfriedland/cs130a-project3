@@ -412,26 +412,22 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
 
     // Right right rotation
     if(balanceFactor < -1 && n->getBalanceFactor(n->right) <= 0){
-        cout << "right right" << endl;
         return rotateLeft(n);
     }
 
     // Left left rotation
     if(balanceFactor > 1 && n->getBalanceFactor(n->left) >= 0){
-        cout << "left left" << endl;
         return rotateRight(n);
     }
 
     // Right left rotation
     if(balanceFactor < -1 && n->getBalanceFactor(n->right) > 0){
-        cout << "right left" << endl;
         n->right = rotateRight(n->right);
         return rotateLeft(n);
     }
     
     // Left right rotation
     if(balanceFactor > 1 && n->getBalanceFactor(n->left) < 0){
-        cout << "left right" << endl;
         n->left = rotateLeft(n->left);
         return rotateRight(n);
     }
