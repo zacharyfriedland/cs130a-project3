@@ -68,7 +68,6 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
 
     n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
     int balance = n->getBalanceFactor(n);
-    // cout << get<0>(n->data) << "." << get<1>(n->data) << " balance: " << balance << endl;
 
     // If unbalanced, 4 cases
 
