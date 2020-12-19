@@ -241,10 +241,12 @@ void AVL::approximateSearch(tuple<int, int> target){
 
 // DONE
 void AVL::printPreOrder(){
-    printPreOrder(root);
-    printer = printer.substr(0, printer.size()-1);
-    cout << printer << endl;
-    printer = "";
+    if(root){
+        printPreOrder(root);
+        printer = printer.substr(0, printer.size()-1);
+        cout << printer << endl;
+        printer = "";
+    }
 }
 
 // DONE
@@ -258,10 +260,12 @@ void AVL::printPreOrder(Node* n){
 
 // DONE
 void AVL::printInOrder(){
-    printInOrder(root);
-    printer = printer.substr(0, printer.size()-1);
-    cout << printer << endl;
-    printer = "";
+    if(root){
+        printInOrder(root);
+        printer = printer.substr(0, printer.size()-1);
+        cout << printer << endl;
+        printer = "";
+    }
 }
 
 // DONE
@@ -287,6 +291,27 @@ AVL::Node* AVL::getNode(tuple<int, int> target, Node* n){
         }
     }
     return 0;
+}
+
+AVL::Node* AVL::findParent(tuple<int, int> target, Node* n){
+    if(target == root->data){
+        return 0;
+    }
+    if(n->left && n->left->data == target){
+        return n;
+    }
+    else if(n->right && n->right->data == target){
+        return n;
+    }
+    else{
+        if(n->left && target < n->data){
+            return findParent(target, n->left);
+        }
+        else if(n->right && target > n->data){
+            return findParent(target, n->right);
+        }
+        return 0;
+    }
 }
 
 // // DONE
@@ -367,13 +392,22 @@ bool AVL::remove(tuple<int, int> target){
 }
 
 AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
-    if(!n)
+    if(target == root->data && !(root->left) && !(root->right)){
+        root = nullptr;
+        return root;
+    }
+    if(!n) // if n is null
         return 0;
-    if(target < n->data)
+    if(target < n->data){
         n->left = remove(target, n->left);
-    else if(target > n->data)
+        //return 0;
+    }
+    else if(target > n->data){
         n->right = remove(target, n->right);
+        //return 0;
+    }
     else{
+        // if n->left does not exist or n->right does not exist or no children
         if(!(n->left) || !(n->right)){
             Node* tmp;
             if(n->left){
@@ -383,22 +417,38 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
                 tmp = n->right;
             }
 
-            if(!tmp){
+            // no child
+            if(!tmp){ 
                 tmp = n;
                 n = nullptr;
             }
+            // one child
             else{
+                // n->data = tmp->data;
                 *n = *tmp;
             }
             free(tmp);
         }
         else{
+            // two children
             // predecessor
             Node* tmp = minNode(n->left);
+            Node* tmpParent = findParent(tmp->data, root);
+            // cout << "tmp = " << get<0>(tmp->data) << "." << get<1>(tmp->data)<< endl;
+            // cout << "tmpParent = " << get<0>(tmpParent->data) << "." << get<1>(tmpParent->data)<< endl;
             // put data of predecessor in this node
-            n->data = tmp->data;
-            n->left = remove(tmp->data, n->left);
-
+            if(n->left == tmp){
+                n->data = tmp->data;
+                if(tmp->left)
+                    n->left = tmp->left->left;
+                else
+                    n->left = nullptr;
+                
+            }
+            else{
+                tmpParent->right = tmp->left;
+                n->data = tmp->data;
+            }
         }
     }
 
@@ -409,27 +459,42 @@ AVL::Node* AVL::remove(tuple<int, int> target, Node* n){
     int balanceFactor = n->getBalanceFactor(n);
 
     // Right right rotation
-    if(balanceFactor < -1 && n->getBalanceFactor(n->right) <= 0){
+    if(balanceFactor < (-1*balanceConstraint) && n->getBalanceFactor(n->right) <= 0){
+        if(n == root){
+            root = rotateLeft(n);
+            return root;
+        }
         return rotateLeft(n);
     }
-
+    
     // Left left rotation
-    if(balanceFactor > 1 && n->getBalanceFactor(n->left) >= 0){
+    if(balanceFactor > balanceConstraint && n->getBalanceFactor(n->left) >= 0){
+        if(n == root){
+            root = rotateRight(n);
+            return root;
+        }
         return rotateRight(n);
     }
 
     // Right left rotation
-    if(balanceFactor < -1 && n->getBalanceFactor(n->right) > 0){
+    if(balanceFactor < (-1*balanceConstraint) && n->getBalanceFactor(n->right) > 0){
         n->right = rotateRight(n->right);
+        if(n == root){
+            root = rotateLeft(n);
+            return root;
+        }
         return rotateLeft(n);
     }
     
     // Left right rotation
-    if(balanceFactor > 1 && n->getBalanceFactor(n->left) < 0){
+    if(balanceFactor > balanceConstraint && n->getBalanceFactor(n->left) < 0){
         n->left = rotateLeft(n->left);
+        if(n == root){
+            root = rotateRight(n);
+            return root;
+        }
         return rotateRight(n);
     }
-
 
     return n;
 }

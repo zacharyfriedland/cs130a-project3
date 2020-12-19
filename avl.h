@@ -54,6 +54,7 @@ class AVL {
         bool search(tuple<int, int> target, Node* n);
         void approximateSearch(tuple<int, int> target, Node* n, double &minDiff, tuple<int, int> &minDiffNodeValue);
         Node* getNode(tuple<int, int> target, Node* n);
+        Node* findParent(tuple<int, int> target, Node* n);
         Node* getPredecessorNode(tuple<int, int> target);
         Node* getSuccessorNode(tuple<int, int> target);
         void printPreOrder(Node* n);
