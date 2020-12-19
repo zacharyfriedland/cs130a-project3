@@ -214,6 +214,7 @@ void AVL::approximateSearch(tuple<int, int> target){
         
         if(pred == target && suc == target){
             cout << "closest to " << get<0>(target) << "." << get<1>(target) << " is " << get<0>(pred) << "." << get<1>(pred) << endl;
+            return;
         }
         string predString = to_string(get<0>(pred)) + "." + to_string(get<1>(pred));
         string sucString = to_string(get<0>(suc)) + "." + to_string(get<1>(suc));
