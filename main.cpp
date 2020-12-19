@@ -7,11 +7,10 @@ using namespace std;
 
 int main(int argc, char** argv) {
     AVL* avl = new AVL();
-    avl->insert(make_tuple(4, 5));
-    avl->insert(make_tuple(3, 9));
-      avl->printInOrder();
-
     avl->insert(make_tuple(3, 5));
+    avl->insert(make_tuple(3, 9));
+
+    avl->insert(make_tuple(4, 5));
     // avl->insert(make_tuple(4, 2));
     // avl->insert(make_tuple(12, 3));
     // avl->insert(make_tuple(1, 2));

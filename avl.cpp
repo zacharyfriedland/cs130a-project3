@@ -45,13 +45,13 @@ bool AVL::insert(tuple<int, int> target){
 
 // TO DO ROTATION
 AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
-    if(!root){
+    if(!root){ // if root does not exist
         root = new Node(make_tuple(get<0>(target), get<1>(target)));
         cout << get<0>(root->data) << "." << get<1>(root->data) << " inserted" << endl;
         return root;
     }
 
-    if(!n){
+    if(!n){ // if this node is null
         Node* in = new Node(target);
         cout << get<0>(in->data) << "." << get<1>(in->data) << " inserted" << endl;
         return in;
@@ -68,28 +68,45 @@ AVL::Node* AVL::insert(tuple<int, int> target, Node* n){
 
     n->height = max(n->getHeight(n->left), n->getHeight(n->right)) + 1;
     int balance = n->getBalanceFactor(n);
+    cout << get<0>(n->data) << "." << get<1>(n->data) << " balance: " << balance << endl;
 
     // If unbalanced, 4 cases
 
     // Left left rotation
     if(balance > 1 && target < n->left->data){
+        if(n == root){
+            root = rotateRight(n);
+            return root;
+        }
         return rotateRight(n);
     }
 
     // Right right rotation
     if(balance < -1 && target > n->right->data){
+        if(n == root){
+            root = rotateLeft(n);
+            return root;
+        }
         return rotateLeft(n);
     }
 
     // Left right rotation
     if(balance > 1 && target > n->left->data){
         n->left = rotateLeft(n->left);
+        if(n == root){
+            root = rotateRight(n);
+            return root;
+        }
         return rotateRight(n);
     }
 
     // Right left rotation
     if(balance < -1 && target < n->right->data){
         n->right = rotateRight(n->right);
+        if(n == root){
+            root = rotateLeft(n);
+            return root;
+        }
         return rotateLeft(n);
     }
 
@@ -272,45 +289,45 @@ AVL::Node* AVL::getNode(tuple<int, int> target, Node* n){
     return 0;
 }
 
+// // DONE
+// AVL::Node* AVL::getPredecessorNode(tuple<int, int> target){
+//     Node* t = this->getNode(target, root);
+//     if(!t){
+//         return 0;
+//     }
+//     else if(t->left){
+//         t = t->left;
+//         while(t->right){
+//             t = t->right;
+//         }
+//         return t;
+//     }
+
+//     while(t->parent && t->parent->left == t){
+//         t = t->parent;
+//     }
+//     return t->parent;
+// }
+
 // DONE
-AVL::Node* AVL::getPredecessorNode(tuple<int, int> target){
-    Node* t = this->getNode(target, root);
-    if(!t){
-        return 0;
-    }
-    else if(t->left){
-        t = t->left;
-        while(t->right){
-            t = t->right;
-        }
-        return t;
-    }
+// AVL::Node* AVL::getSuccessorNode(tuple<int, int> target){
+//     Node* t = this->getNode(target, root);
+//     if(!t){
+//         return 0;
+//     }
+//     else if(t->right){
+//         t = t->right;
+//         while(t->left){
+//             t = t->left;
+//         }
+//         return t;
+//     }
 
-    while(t->parent && t->parent->left == t){
-        t = t->parent;
-    }
-    return t->parent;
-}
-
-// DONE
-AVL::Node* AVL::getSuccessorNode(tuple<int, int> target){
-    Node* t = this->getNode(target, root);
-    if(!t){
-        return 0;
-    }
-    else if(t->right){
-        t = t->right;
-        while(t->left){
-            t = t->left;
-        }
-        return t;
-    }
-
-    while(t->parent && t->parent->right == t){
-        t = t->parent;
-    }
-    return t->parent;
-}
+//     while(t->parent && t->parent->right == t){
+//         t = t->parent;
+//     }
+//     return t->parent;
+// }
 
 AVL::Node* AVL::rotateLeft(Node* x){
     Node* y = x->right;
@@ -325,17 +342,15 @@ AVL::Node* AVL::rotateLeft(Node* x){
     return y;
 }
 
-AVL::Node* AVL::rotateRight(Node* y){
-    Node* x = y->left;
-    Node* z = x->right;
+AVL::Node* AVL::rotateRight(Node* grandparent){
+    Node* temp = grandparent->left;
+    grandparent->left = temp->right;
+    temp->right = grandparent;
 
-    x->right = y;
-    y->left = z;
+    temp->height = max(temp->getHeight(temp->left), temp->getHeight(temp->right)) + 1;
+    grandparent->height = max(grandparent->getHeight(grandparent->left), grandparent->getHeight(grandparent->right)) + 1;
 
-    y->height = max(y->getHeight(y->left), y->getHeight(y->right)) + 1;
-    x->height = max(x->getHeight(x->left), x->getHeight(x->right)) + 1;
-
-    return x;
+    return temp;
 }
 
 AVL::Node* AVL::minNode(Node* n){

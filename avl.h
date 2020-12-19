@@ -40,10 +40,10 @@ class AVL {
 
             Node* left;
             Node* right;
-            Node* parent;
+            //Node* parent;
 
             Node(tuple<int,int> num = make_tuple(0, 0)) :
-                         data(num), height(1), left(nullptr), right(nullptr), parent(nullptr) { }
+                         data(num), height(1), left(nullptr), right(nullptr) { } //parent(nullptr) { }
         };
         
         int balanceConstraint;
